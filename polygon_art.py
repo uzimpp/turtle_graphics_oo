@@ -1,52 +1,105 @@
 import turtle
 import random
 
-def draw_polygon(num_sides, size, orientation, location, color, border_size):
-    turtle.penup()
-    turtle.goto(location[0], location[1])
-    turtle.setheading(orientation)
-    turtle.color(color)
-    turtle.pensize(border_size)
-    turtle.pendown()
-    for _ in range(num_sides):
-        turtle.forward(size)
-        turtle.left(360/num_sides)
-    turtle.penup()
+reduction_ratio = 0.618
 
-def get_new_color():
-    return (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+class Run():
+	def __init__(self, n) -> None:
+		self.__n = n
+	
+	@property
+	def n(self):
+		return self.__n
+	
+	@n.setter
+	def n(self, n):
+		self.__n = n
+
+
+	def draw_multiple(self):
+		"""Draw multiple polygons based on the input number."""
+		times = random.randint(20, 30)
+		for _ in range(times):
+			if 5 <= self.__n <= 9:
+				polygon = EmbeddedPolygon(self.n)
+				polygon.draw_polygon()
+			else:
+				polygon = Polygon(self.n)
+				polygon.draw_polygon()
+
+		
+class Polygon():
+	def __init__(self, n) -> None:
+		self.n = n
+		self.num_sides = self.determine_num_sides()
+		self.size = random.randint(50, 150)
+		self.orientation = random.randint(0, 90)
+		self.location = [random.randint(-300, 300), random.randint(-200, 200)]
+		self.color = random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)
+		self.border_size = random.randint(1, 10)
+
+	def determine_num_sides(self):
+		if self.n in [4, 8, 9]:
+			return random.randint(3, 5)
+		if self.n in [1, 5]:
+			return 3
+		if self.n in [2, 6]:
+			return 4
+		if self.n in [3, 7]:
+			return 5
+		return 3
+
+	def draw_polygon(self):
+		turtle.penup()
+		turtle.goto(self.location[0], self.location[1])
+		turtle.setheading(self.orientation)
+		turtle.color(self.color)
+		turtle.pensize(self.border_size)
+		turtle.pendown()
+		self.draw()
+		turtle.penup()
+	
+	def draw(self):
+		for _ in range(self.num_sides):
+			turtle.forward(self.size)
+			turtle.left(360/self.num_sides)
+
+class EmbeddedPolygon(Polygon):
+	def draw_polygon(self):
+		if self.n == 9:
+			depth = random.randint(0, 3)
+		else:
+			depth = 3
+		for _ in range(1, depth + 1):
+			turtle.penup()
+			turtle.goto(self.location[0], self.location[1])
+			turtle.setheading(self.orientation)
+			turtle.right(90 + (180/self.num_sides))
+			turtle.forward((self.size / reduction_ratio) - self.size)
+			turtle.color(self.color)
+			turtle.pensize(self.border_size)
+			turtle.pendown()
+			turtle.setheading(self.orientation)
+			self.draw()
+			self.size *= reduction_ratio
+			turtle.penup()
+
 
 turtle.speed(0)
 turtle.bgcolor('black')
 turtle.tracer(0)
 turtle.colormode(255)
 
-# draw a polygon at a random location, orientation, color, and border line thickness
-num_sides = random.randint(3, 5) # triangle, square, or pentagon
-size = random.randint(50, 150)
-orientation = random.randint(0, 90)
-location = [random.randint(-300, 300), random.randint(-200, 200)]
-color = get_new_color()
-border_size = random.randint(1, 10)
-draw_polygon(num_sides, size, orientation, location, color, border_size)
-
-# specify a reduction ratio to draw a smaller polygon inside the one above
-reduction_ratio = 0.618
-
-# reposition the turtle and get a new location
-turtle.penup()
-turtle.forward(size*(1-reduction_ratio)/2)
-turtle.left(90)
-turtle.forward(size*(1-reduction_ratio)/2)
-turtle.right(90)
-location[0] = turtle.pos()[0]
-location[1] = turtle.pos()[1]
-
-# adjust the size according to the reduction ratio
-size *= reduction_ratio
-
-# draw the second polygon embedded inside the original 
-draw_polygon(num_sides, size, orientation, location, color, border_size)
+while(True):
+	n = int(input("Which art do you want to generate? Enter a number between 1 to 9 inclusive: "))
+	turtle.clear()
+	if n == 0:
+		break
+	elif 1 <= n <= 9:
+		run = Run(n)
+		run.draw_multiple()
+	else:
+		print("Please try again")
 
 # hold the window; close it by clicking the window close 'x' mark
 turtle.done()
