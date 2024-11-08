@@ -99,5 +99,4 @@ while(True):
 	else:
 		print("Please try again")
 
-# hold the window; close it by clicking the window close 'x' mark
 turtle.done()
