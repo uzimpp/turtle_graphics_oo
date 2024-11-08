@@ -17,14 +17,12 @@ class Run():
 
 
 	def draw_multiple(self):
-		"""Draw multiple polygons based on the input number."""
-		times = random.randint(20, 30)
-		for _ in range(times):
+		for _ in range(30):
 			if 5 <= self.__n <= 9:
-				polygon = EmbeddedPolygon(self.n)
+				polygon = EmbeddedPolygon(self.__n)
 				polygon.draw_polygon()
 			else:
-				polygon = Polygon(self.n)
+				polygon = Polygon(self.__n)
 				polygon.draw_polygon()
 
 		
