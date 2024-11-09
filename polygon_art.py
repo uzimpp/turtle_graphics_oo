@@ -1,9 +1,7 @@
 import turtle
 import random
 
-reduction_ratio = 0.618
-
-class Run():
+class PolygonArt():
 	def __init__(self, n) -> None:
 		self.__n = n
 	
@@ -16,70 +14,105 @@ class Run():
 		self.__n = n
 
 
-	def draw_multiple(self):
+	def run(self):
 		for _ in range(30):
+			n_sides  = 3
+			if self.__n in [4, 8, 9]:
+				n_sides  = random.randint(3, 5)
+			if self.__n in [2, 6]:
+				n_sides  = 4
+			if self.__n in [3, 7]:
+				n_sides  = 5
 			if 5 <= self.__n <= 9:
-				polygon = EmbeddedPolygon(self.__n)
-				polygon.draw_polygon()
+				depth = 3
+				if self.__n == 9:
+					depth = random.randint(0, 3)
+				polygon = EmbeddedPolygon(n_sides, depth)
+				polygon.draw()
 			else:
-				polygon = Polygon(self.__n)
-				polygon.draw_polygon()
+				polygon = Polygon(n_sides)
+				polygon.draw()
 
 		
 class Polygon():
-	def __init__(self, n) -> None:
-		self.n = n
-		self.num_sides = self.determine_num_sides()
-		self.size = random.randint(50, 150)
-		self.orientation = random.randint(0, 90)
-		self.location = [random.randint(-300, 300), random.randint(-200, 200)]
-		self.color = random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)
-		self.border_size = random.randint(1, 10)
+	def __init__(self, n_sides) -> None:
+		self.__num_sides = n_sides
+		self.__size = random.randint(50, 150)
+		self.__orientation = random.randint(0, 90)
+		self.__location = [random.randint(-300, 300), random.randint(-200, 200)]
+		self.__color = random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)
+		self.__border_size = random.randint(1, 10)
 
-	def determine_num_sides(self):
-		if self.n in [4, 8, 9]:
-			return random.randint(3, 5)
-		if self.n in [1, 5]:
-			return 3
-		if self.n in [2, 6]:
-			return 4
-		if self.n in [3, 7]:
-			return 5
-		return 3
+	@property
+	def size(self):
+		return self.__size
+	
+	@size.setter
+	def size(self, value):
+		self.__size = value
 
-	def draw_polygon(self):
+	@property
+	def num_sides(self):
+		return self.__num_sides
+	
+	@property
+	def location(self):
+		return self.__location
+
+	@property
+	def orientation(self):
+		return self.__orientation
+
+	@property
+	def color(self):
+		return self.__color
+
+	@property
+	def border_size(self):
+		return self.__border_size
+
+	def draw(self):
 		turtle.penup()
 		turtle.goto(self.location[0], self.location[1])
 		turtle.setheading(self.orientation)
 		turtle.color(self.color)
 		turtle.pensize(self.border_size)
 		turtle.pendown()
-		self.draw()
+		self.move()
 		turtle.penup()
 	
-	def draw(self):
+	def move(self):
 		for _ in range(self.num_sides):
 			turtle.forward(self.size)
 			turtle.left(360/self.num_sides)
 
 class EmbeddedPolygon(Polygon):
-	def draw_polygon(self):
-		if self.n == 9:
-			depth = random.randint(0, 3)
-		else:
-			depth = 3
-		for _ in range(1, depth + 1):
+	def __init__(self, n_sides, depth):
+		super().__init__(n_sides)
+		self.__ratio = 0.618
+		self.__depth = depth
+
+	@property
+	def ratio(self):
+		return self.__ratio
+
+	@property
+	def depth(self):
+		return self.__depth
+
+	def draw(self):
+		for _ in range(1, self.__depth + 1):
 			turtle.penup()
 			turtle.goto(self.location[0], self.location[1])
 			turtle.setheading(self.orientation)
 			turtle.right(90 + (180/self.num_sides))
-			turtle.forward((self.size / reduction_ratio) - self.size)
+			turtle.forward((self.size / self.__ratio) - self.size)
 			turtle.color(self.color)
 			turtle.pensize(self.border_size)
 			turtle.pendown()
 			turtle.setheading(self.orientation)
-			self.draw()
-			self.size *= reduction_ratio
+			self.move()
+			self.size *= self.__ratio
 			turtle.penup()
 
 
@@ -94,8 +127,8 @@ while(True):
 	if n == 0:
 		break
 	elif 1 <= n <= 9:
-		run = Run(n)
-		run.draw_multiple()
+		art = PolygonArt(n)
+		art.run()
 	else:
 		print("Please try again")
 
