@@ -1,5 +1,31 @@
 # OO code using turtle graphics
-- From the starting code, polygon_art.py, you are to write an OO program that generates different pieces of art works
-- Fork, then, clone this repo
-- Read the instructions given in the course's Google Classroom and start coding
-- Once you are done, push your final code to your Github repo and modify this README to report on the work you have done
+
+# Object-Oriented Turtle Graphics Art Generator
+- Created separate classes for different pattern types
+- Implemented inheritance for shared drawing functionality
+- Used composition to combine different patterns
+- Added color management system
+- Incorporated random elements for unique designs
+
+## Features
+- Object-oriented implementation of turtle graphics
+- Multiple pattern generators:
+  - Polygons with customizable sides and colors
+  - Spiral patterns
+  - Mandala designs
+  - Random walk art
+- Color schemes and palette management
+- Configurable drawing parameters
+
+## Sample Patterns
+- Regular polygons with varying sizes
+- Spiral patterns with color gradients
+- Symmetric mandala designs
+- Abstract random patterns
+
+## Dependencies
+- Python 3.x
+- turtle module (built-in)
+
+## Author
+Worakrit Kullanatpokin
