@@ -1,7 +1,7 @@
 import turtle
 import random
 
-class PolygonArt():
+class PolygonArt:
 	def __init__(self, n) -> None:
 		self.__n = n
 	
@@ -13,16 +13,15 @@ class PolygonArt():
 	def n(self, n):
 		self.__n = n
 
-
 	def run(self):
 		for _ in range(30):
-			n_sides  = 3
+			n_sides = 3
 			if self.__n in [4, 8, 9]:
-				n_sides  = random.randint(3, 5)
+				n_sides = random.randint(3, 5)
 			if self.__n in [2, 6]:
-				n_sides  = 4
+				n_sides = 4
 			if self.__n in [3, 7]:
-				n_sides  = 5
+				n_sides = 5
 			if 5 <= self.__n <= 9:
 				depth = 3
 				if self.__n == 9:
@@ -34,7 +33,7 @@ class PolygonArt():
 				polygon.draw()
 
 		
-class Polygon():
+class Polygon:
 	def __init__(self, n_sides) -> None:
 		self.__num_sides = n_sides
 		self.__size = random.randint(50, 150)
@@ -86,6 +85,7 @@ class Polygon():
 			turtle.forward(self.size)
 			turtle.left(360/self.num_sides)
 
+
 class EmbeddedPolygon(Polygon):
 	def __init__(self, n_sides, depth):
 		super().__init__(n_sides)
@@ -121,15 +121,12 @@ turtle.bgcolor('black')
 turtle.tracer(0)
 turtle.colormode(255)
 
-while(True):
-	n = int(input("Which art do you want to generate? Enter a number between 1 to 9 inclusive: "))
-	turtle.clear()
-	if n == 0:
-		break
-	elif 1 <= n <= 9:
-		art = PolygonArt(n)
-		art.run()
-	else:
-		print("Please try again")
+n = int(input("Which art do you want to generate? Enter a number between 1 to 9 inclusive: "))
+turtle.clear()
+if 1 <= n <= 9:
+	art = PolygonArt(n)
+	art.run()
+else:
+	print("Please try again")
 
 turtle.done()
